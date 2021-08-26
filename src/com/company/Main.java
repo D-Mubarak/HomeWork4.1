@@ -7,13 +7,12 @@ public class Main {
     public static int bossHealth = 800;
     public static int bossDamage = 50;
     public static String bossDefence = "";
-    public static int[] heroesHealth = {260, 250, 270,350};
-    public static int[] heroesDamage = {15, 20, 10,0};
+    public static int[] heroesHealth = {260, 250, 270, 350, 100, 300, 280};
+    public static int[] heroesDamage = {15, 20, 10, 0, 10, 25, 15};
     public static String[] heroesAttackType = {
-            "Physical", "Magical", "Kinetic", "Medical"};
+            "Physical", "Magical", "Kinetic", "Medical", "Lucky", "Thor", "Berserk"};
 
     public static int MedicSupport = randHealth();
-
 
 
     public static void main(String[] args) {
@@ -33,7 +32,11 @@ public class Main {
         }
 
         heroesHit();
+        lucky();
+        Thor();
+        Berserk();
         printStatistics();
+        BossIsBack();
 
     }
 
@@ -93,7 +96,7 @@ public class Main {
 
     public static void bossHits() {
         for (int i = 0; i < heroesHealth.length; i++) {
-            if (heroesHealth[i] > 0) {
+            if (heroesHealth[i] > 0 && bossHealth > 0) {
                 if (heroesHealth[i] - bossDamage < 0) {
                     heroesHealth[i] = 0;
                 } else {
@@ -103,7 +106,6 @@ public class Main {
         }
 
     }
-
 
 
     public static void printStatistics() {
@@ -122,8 +124,8 @@ public class Main {
         return randomHealth;
     }
 
-    public static boolean isMedicDie(){
-        if(heroesHealth[3] <= 0){
+    public static boolean isMedicDie() {
+        if (heroesHealth[3] <= 0) {
             System.out.println("Medic is die");
             return true;
         }
@@ -133,7 +135,7 @@ public class Main {
 
     public static void MedicWorks() {
         Random random = new Random();
-        int a = random.nextInt(2);
+        int a = random.nextInt(3);
 
         for (int i = 0; i < heroesHealth[a]; i++) {
             if (heroesHealth[a] < 100 && heroesHealth[a] > 0) {
@@ -143,7 +145,53 @@ public class Main {
         }
     }
 
+    public static void lucky() {
+        Random random = new Random();
+        boolean isLuckyEvaded = random.nextBoolean();
+        if (heroesHealth[4] > 0) {
+            if (!(isLuckyEvaded)) {
+                heroesHealth[4] = heroesHealth[4] + bossDamage;
+                if (heroesHealth[4] > 130) {
+                    heroesHealth[4] = heroesHealth[4] - bossDamage;
+                }
+                System.out.println("Lucky evaded");
+            } else if (isLuckyEvaded) {
+                heroesHealth[4] = heroesHealth[4];
+            }
+        }
 
+    }
+
+    public static void Thor() {
+        Random random = new Random();
+        boolean superOfThorIsTrue = random.nextBoolean();
+        if (superOfThorIsTrue && heroesHealth[5] >0) {
+            bossDamage = 0;
+            System.out.println("Boss is stunned ");
+        } else if (!(superOfThorIsTrue) && heroesHealth[5] > 0) {
+            System.out.println("Boss isn't stunned ");
+
+        }
+    }
+
+    public static void BossIsBack() {
+        bossDamage = 50;
+    }
+
+    public static void Berserk() {
+        Random random = new Random();
+        int protectionOfBerserk = random.nextInt(25) + 1;
+        if(heroesHealth[6] > 0 ) {
+            heroesHealth[6] = (heroesHealth[6] - bossDamage) + protectionOfBerserk;
+            heroesDamage[6] = heroesDamage[6] + protectionOfBerserk;
+            System.out.println("Berserk activated SUPER");
+
+        }
+        if(heroesHealth[6] < 0){
+            heroesHealth[6] = 0;
+        }
+    }
+}
     /*
     public static int randHero() {
         int min = 0;
@@ -169,4 +217,4 @@ public class Main {
         return randomHealth;
     }
     */
-}
+
